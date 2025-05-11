@@ -1,0 +1,61 @@
+footer {
+  background-color: #4A2B63;
+  color: #FFFFFF;
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+footer .left, footer .right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  justify-content: space-between;
+}
+
+footer .right a {
+  margin-left: 15px;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+footer .right a:hover {
+  opacity: 0.7;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-box {
+  margin: auto;
+}
+
+.checkbox {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.checkbox label {
+  display: flex;
+  gap: 5px;
+}
+
+.checkbox input {
+  margin: 0;
+  width: auto;
+}

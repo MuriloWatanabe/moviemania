@@ -3,9 +3,8 @@ footer {
   color: #FFFFFF;
   padding: 20px 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
   width: 100%;
   position: fixed;
   bottom: 0;
@@ -13,21 +12,26 @@ footer {
   right: 0;
 }
 
-footer .left, footer .right {
+footer .left {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
   justify-content: space-between;
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
 }
 
+footer .right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 90px;
+
 footer .right a {
-  margin-left: 15px;
-  color: #FFFFFF;
+  color: white;
   text-decoration: none;
   font-size: 1rem;
+  transition: opacity 0.3s;
 }
 
 footer .right a:hover {

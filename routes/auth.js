@@ -10,4 +10,11 @@ router.post('/login', authController.loginUsuario);
 router.get('/register', authController.viewRegister);
 router.post('/register', authController.userRegister);
 
+// Rotas para o esqueceu a senha
+router.get('/password', authController.viewPassword);
+router.post('/password', authController.userPassword);
+
+// Rotas para o esqueceu a senha
+router.get('/home', authController.viewHome);
+
 module.exports = router;

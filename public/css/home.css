@@ -1,56 +1,144 @@
 body {
-      background: linear-gradient(135deg, #5e2b92, #6f42c1);
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: #fff;
-    }
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
 
-    header {
-      background-color: #2c1a47;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+header {
+  background-color: #2c1a47;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
 
-    header .logo {
-      font-size: 24px;
-      font-weight: bold;
-    }
+header .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
 
-    header nav a {
-      margin-left: 15px;
-      color: #FFFFFF;
-      text-decoration: none;
-    }
+header .search-bar {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
 
-    .content {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 0 15px;
-    }
+header .search-bar input {
+  width: 60%;
+  max-width: 500px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
 
-    .section-title {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
 
-    .movie-grid {
-      display: flex;
-      gap: 15px;
-      overflow-x: auto;
-    }
+header nav a {
+  color: #FFFFFF;
+  text-decoration: none;
+}
 
-    .movie-card {
-      background-color: #3a255d;
-      padding: 10px;
-      border-radius: 8px;
-      width: 150px;
-      text-align: center;
-      flex-shrink: 0;
-    }
+header nav .user-menu {
+  position: relative;
+}
 
-    .movie-card img {
-      width: 100%;
-      border-radius: 8px;
-    }
+header .user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+header .user-trigger img {
+  border-radius: 50%;
+  margin-left: 50px;
+}
+
+header .dropdown-menu {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  background-color: #d089f2;
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+header .dropdown-menu a {
+  color: #2c1a47;
+  text-decoration: none;
+  margin-bottom: 8px;
+  font-size: 16px;
+  display: block;
+}
+
+header .dropdown-menu a:hover {
+  text-decoration: underline;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 15px;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.movie-grid {
+  display: flex;
+  gap: 15px;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.movie-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.movie-card {
+  background-color: #3a255d;
+  padding: 10px;
+  border-radius: 8px;
+  width: 180px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.movie-card::-webkit-scrollbar {
+  display: none;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+h1 {
+  font-size: 36px;
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.show-dropdown {
+  display: flex !important;
+}

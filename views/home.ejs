@@ -1,36 +1,112 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MovieMania - Início</title>
   <link rel="stylesheet" href="/css/home.css">
   <link rel="stylesheet" href="/css/footer.css">
-  <style>
-  </style>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
   <header>
     <div class="logo">MovieMania</div>
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar filmes...">
+    </div>
     <nav>
       <a href="#">Filmes</a>
       <a href="#">Listas</a>
       <a href="#">Watchlist</a>
+      <div class="user-menu">
+        <div class="user-trigger" id="user-menu-trigger">
+          <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Usuário" width="30" height="30">
+        </div>
+        <div class="dropdown-menu" id="user-dropdown-menu">
+          <a href="#">Inicio</a>
+          <a href="#">Perfil</a>
+          <a href="#">Watchlist</a>
+          <a href="#">Reviews</a>
+          <a href="#">Listas</a>
+          <a href="#">Curtidos</a>
+          <a href="#">Favoritos</a>
+        </div>
+      </div>
     </nav>
   </header>
+
   <div class="content">
+    <h1>Bem vindo ao Moviemania!</h1>
     <h2>Novidades no MovieMania</h2>
     <div class="movie-grid" id="novidades">
-        <div class="movie-card">
-        </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Vingadores Ultimato</h3>
+      </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Vingadores Ultimato</h3>
+      </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Vingadores Ultimato</h3>
+      </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Vingadores Ultimato</h3>
+      </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Vingadores Ultimato</h3>
+      </div>
     </div>
 
     <h2>Populares no MovieMania</h2>
     <div class="movie-grid" id="populares">
-        <div class="movie-card">
-        </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Título do Filme</h3>
+      </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Título do Filme</h3>
+      </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Título do Filme</h3>
+      </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Título do Filme</h3>
+      </div>
+      <div class="movie-card">
+        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
+        <h3>Título do Filme</h3>
+      </div>
     </div>
   </div>
-	<%- include("footer") %>
+
+  <%- include("footer") %>
 </body>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const userMenuTrigger = document.getElementById('user-menu-trigger');
+  const dropdownMenu = document.getElementById('user-dropdown-menu');
+
+  if (userMenuTrigger && dropdownMenu) {
+    userMenuTrigger.addEventListener('click', function(event) {
+      dropdownMenu.classList.toggle('show-dropdown');
+      event.stopPropagation();
+    });
+
+    document.addEventListener('click', function(event) {
+      if (!dropdownMenu.contains(event.target) && event.target !== userMenuTrigger) {
+        dropdownMenu.classList.remove('show-dropdown');
+      }
+    });
+  }
+});
+</script>
 </html>

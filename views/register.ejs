@@ -3,51 +3,74 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Login - MovieMania</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - MovieMania</title>
     <link rel="stylesheet" href="/css/register.css">
     <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/styles.css"> 
+    <style>
+        .message {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .message.error {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .message.success {
+            background-color: #28a745;
+            color: white;
+        }
+    </style>
 </head>
 
 <body class="login">
     <div class="login-box">
         <img src="/img/logo.png" alt="Logo MovieMania" class="logo">
         <h2>Cadastro de conta</h2>
-        <form action="/login" method="POST">
-            <input type="text" name="email" placeholder="Email ou número de celular" required>
-            <input type="text" name="email" placeholder="Usuário" required>
+
+        <% if (messages.error && messages.error.length > 0) { %>
+            <div class="message error">
+                <%= messages.error[0] %>
+            </div>
+        <% } %>
+        <% if (messages.success && messages.success.length > 0) { %>
+            <div class="message success">
+                <%= messages.success[0] %>
+            </div>
+        <% } %>
+
+        <form action="/register" method="POST">
+            <input type="text" name="nome" placeholder="Nome de Usuário" required> 
+            
+            <input type="email" name="email" placeholder="Email" required>
+            
             <input type="password" name="senha" placeholder="Senha" required>
+            
             <div class="checkbox">
                 <div>
-                    <label for="term1">
-                        <input type="checkbox" name="term1" id="term1" required>
-                        Eu tenho mais de 16 anos e concordo com termos de uso.
+                    <label for="maior_16_anos">
+                        <input type="checkbox" name="maior_16_anos" id="maior_16_anos" required>
+                        Eu tenho mais de 16 anos e concordo com os termos de uso.
                     </label>
                 </div>
                 <div>
-                    <label for="term2">
-                        <input type="checkbox" name="term2" id="term2" required>
-                        Eu aceito a Política de Privacidade e concordo com o processamento dos meus dados pessoais de
-                        acordo com ela.
+                    <label for="aceitou_politica_privacidade">
+                        <input type="checkbox" name="aceitou_politica_privacidade" id="aceitou_politica_privacidade" required>
+                        Eu aceito a Política de Privacidade e concordo com o processamento dos meus dados pessoais.
                     </label>
                 </div>
             </div>
             <button type="submit">Cadastrar</button>
         </form>
-        <p>Não tem conta? <a href="/register"><strong>Cadastre-se agora</strong></a></p>
+        <p>Já tem conta? <a href="/login"><strong>Entrar</strong></a></p>
     </div>
 
-    <footer>
-        <div class="left">
-            <p>© MovieMania LTDA. Made by SENZALEROS in Santa Catarina, Brasil.</p>
-        </div>
-        <div class="right">
-            <a href="#"><img src="/img/instagram-icon.png" alt="Instagram" width="24"></a>
-            <a href="#"><img src="/img/twitter-icon.png" alt="Twitter" width="24"></a>
-            <a href="#"><img src="/img/facebook-icon.png" alt="Facebook" width="24"></a>
-            <a href="#"><img src="/img/tiktok-icon.png" alt="TikTok" width="24"></a>
-            <a href="#"><img src="/img/youtube-icon.png" alt="YouTube" width="24"></a>
-        </div>
-    </footer>
+    <%- include("footer") %>
 </body>
-
 </html>

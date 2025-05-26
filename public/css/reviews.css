@@ -1,0 +1,129 @@
+.reviews-section {
+    padding: 20px;
+    background-color: #2c1a47;
+    color: #FFFFFF;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.reviews-section h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #FFFFFF;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.review-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    justify-content: center;
+    align-items: start;
+}
+
+@media (min-width: 768px) {
+    .review-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 50px;
+}
+
+.review-card {
+    background-color: #3b2a5c;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    align-items: flex-start;
+}
+
+.review-card img {
+    width: 120px;
+    height: 180px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.review-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.review-header .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.review-header .username {
+    font-weight: bold;
+    font-size: 16px;
+    color: #d089f2; /
+}
+
+.review-details h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #FFFFFF;
+}
+
+.review-details .movie-year {
+    font-size: 14px;
+    color: #AAAAAA;   
+	margin-left: 5px;
+}
+
+.review-stats {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 5px;
+    color: #CCCCCC;
+
+.review-stats span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.review-stats .icon {
+    font-size: 16px;
+    color: #d089f2;
+}
+
+.review-text {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-top: 15px;
+    color: #E0E0E0;
+}
+
+.review-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    color: #CCCCCC;
+    font-size: 14px;
+}
+
+.review-footer .heart-icon,
+.review-footer .comment-icon {
+    font-size: 16px;
+    color: #d089f2;
+}
+
+.review-footer span {
+    font-weight: bold;
+}

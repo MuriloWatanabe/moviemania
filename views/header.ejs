@@ -1,0 +1,42 @@
+    <header>
+        <div class="logo">MovieMania</div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar filmes...">
+        </div>
+
+        <nav>
+            <a href="/home">Filmes</a>
+            <a href="#">Listas</a>
+            <a href="#">Watchlist</a>
+            <div class="user-menu">
+                <a href="#" class="user-trigger">
+                    <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Usuário" width="30" height="30">
+                </a>
+                <div class="dropdown-menu">
+                    <a href="/user">Perfil</a>
+                    <a href="#">Configurações</a>
+                    <a href="#">Sair</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userTrigger = document.querySelector('.user-trigger');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+
+        if (userTrigger && dropdownMenu) {
+            userTrigger.addEventListener('click', function(event) {
+                dropdownMenu.classList.toggle('show-dropdown');
+                event.stopPropagation(); // Evita que o clique se propague para o document
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!userTrigger.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('show-dropdown');
+                }
+            });
+        }
+    });
+    </script>

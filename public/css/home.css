@@ -3,86 +3,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-header {
-  background-color: #2c1a47;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
-
-header .logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-header .search-bar {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-}
-
-header .search-bar input {
-  width: 60%;
-  max-width: 500px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-}
-
-header nav {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-header nav a {
-  color: #FFFFFF;
-  text-decoration: none;
-}
-
-header nav .user-menu {
-  position: relative;
-}
-
-header .user-trigger {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-header .user-trigger img {
-  border-radius: 50%;
-  margin-left: 50px;
-}
-
-header .dropdown-menu {
-  position: absolute;
-  top: 35px;
-  left: 0;
-  background-color: #d089f2;
-  padding: 10px 15px;
-  border-radius: 8px;
-  display: none;
-  flex-direction: column;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  z-index: 10;
-}
-
-header .dropdown-menu a {
-  color: #2c1a47;
-  text-decoration: none;
-  margin-bottom: 8px;
-  font-size: 16px;
-  display: block;
-}
-
-header .dropdown-menu a:hover {
-  text-decoration: underline;
-}
-
 .content {
   max-width: 1200px;
   margin: 20px auto;
@@ -96,9 +16,10 @@ header .dropdown-menu a:hover {
 
 .movie-grid {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   overflow-x: hidden;
   scrollbar-width: none;
+  justify-content: center;
 }
 
 .movie-grid::-webkit-scrollbar {
@@ -139,6 +60,11 @@ h1 {
   justify-content: center;
 }
 
-.show-dropdown {
-  display: flex !important;
+#subh2 {
+  font-size: 22px;
+  display: flex;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
 }

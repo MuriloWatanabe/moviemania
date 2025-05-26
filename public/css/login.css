@@ -50,3 +50,21 @@ body.login {
 	color: #FFFFFF;
 	text-decoration: none;
   }
+
+  .message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.message.error {
+    background-color: #dc3545;
+    color: white;
+}
+
+.message.success {
+    background-color: #28a745;
+    color: white;
+}

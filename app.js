@@ -34,6 +34,12 @@ app.use('/', authRoutes);
 
 app.get('/', authController.isAuthenticated, authController.viewHome);
 
+// ROTAS DE API DEVEM VIR ANTES DO 404!
+app.get('/api/search-movies', authController.isAuthenticated, authController.searchMovies);
+app.post('/user/add-diary-entry', authController.isAuthenticated, authController.addDiaryEntry);
+app.get('/user/:tab?', authController.isAuthenticated, authController.user);
+
+// MIDDLEWARE 404 DEVE VIR DEPOIS DE TODAS AS ROTAS
 app.use((req, res, next) => {
     res.status(404).send("Desculpe, a página não foi encontrada.");
 });
@@ -44,7 +50,11 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-  console.log('Acesse http://localhost:3000/login para fazer login');
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando em http://localhost:${PORT}`);
+        console.log('Acesse http://localhost:3000/login para fazer login');
+    });
+}
+
+module.exports = app;

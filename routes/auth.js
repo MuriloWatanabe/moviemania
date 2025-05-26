@@ -12,6 +12,7 @@ router.get('/password', authController.viewPassword);
 
 router.get('/home', authController.viewHome);
 
-router.get('/user', authController.user);
+router.get('/user', authController.isAuthenticated, authController.user);
+router.get('/user/:tab', authController.isAuthenticated, authController.user);
 
 module.exports = router;

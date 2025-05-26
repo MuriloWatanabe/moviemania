@@ -1,20 +1,258 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/css/footer.css">
-  	<link rel="stylesheet" href="/css/styles.css">
-	<link rel="stylesheet" href="/css/header.css">
-	<title>MovieMania</title>
-</head>
-<header>
-    <%- include("header") %>
-</header>
-<body>
-	<img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Usuário" width="30" height="30">
-  <%- include("footer") %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário - MovieMania</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/user.css">
+    </head>
+
+<body class="user-profile-page">
+    <%- include('header') %>
+
+    <main class="user-profile-main">
+        <section class="profile-header">
+            <div class="user-avatar">
+                <img src="/img/default-avatar.png" alt="Avatar do Usuário">
+            </div>
+            <div class="user-info">
+                <h1>
+                    <%= currentUser ? currentUser.nome : 'Usuário' %>
+                </h1>
+                <button class="edit-profile-btn">Editar Perfil</button>
+                <div class="more-options">...</div>
+            </div>
+        </section>
+
+        <nav class="profile-nav">
+            <ul>
+                <li><a href="/user" class="<%= activeTab === 'perfil' ? 'active' : '' %>">Perfil</a></li>
+                <li><a href="/user/filmes" class="<%= activeTab === 'filmes' ? 'active' : '' %>">Filmes</a></li>
+                <li><a href="/user/diario" class="<%= activeTab === 'diario' ? 'active' : '' %>">Diário</a></li>
+                <li><a href="/user/reviews" class="<%= activeTab === 'reviews' ? 'active' : '' %>">Reviews</a></li>
+                <li><a href="/user/watchlist" class="<%= activeTab === 'watchlist' ? 'active' : '' %>">WatchList</a></li>
+                <li><a href="/user/listas" class="<%= activeTab === 'listas' ? 'active' : '' %>">Listas</a></li>
+                <li><a href="/user/curtidos" class="<%= activeTab === 'curtidos' ? 'active' : '' %>">Curtidos</a></li>
+            </ul>
+        </nav>
+
+        <section class="profile-content">
+            <% if (activeTab === 'perfil') { %>
+                <div class="section-block">
+                    <h3>Filmes Favoritos</h3>
+                    <% if (favoriteMovies && favoriteMovies.length > 0) { %>
+                        <div class="movies-grid">
+                            <% favoriteMovies.forEach(movie => { %>
+                                <div class="movie-card">
+                                    <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %>">
+                                    <p><%= movie.titulo %></p>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <p class="no-content-message">Não tem nenhum filme favorito.</p>
+                    <% } %>
+                </div>
+
+                <div class="section-block recent-activity">
+                    <div class="section-header">
+                        <h3>Atividades Recentes</h3>
+                        <span class="view-all">ALL</span>
+                    </div>
+                    <div class="activity-grid">
+                        <% if (recentActivities && recentActivities.length > 0) { %>
+                            <% recentActivities.forEach(activity => { %>
+                                <div class="activity-item">
+                                    <p><%= activity.description %></p>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="activity-item"></div>
+                            <div class="activity-item"></div>
+                            <div class="activity-item"></div>
+                            <div class="activity-item"></div>
+                            <div class="activity-item"></div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } else if (activeTab === 'filmes') { %>
+                <div class="section-block movie-list-section">
+                    <div class="filter-bar">
+                        <div class="filter-dropdown">
+                            <label for="filter-watched">Assistidos</label>
+                            <select id="filter-watched">
+                                <option value="all">Todos</option>
+                                <option value="true">Sim</option>
+                                <option value="false">Não</option>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-rating">Avaliação</label>
+                            <select id="filter-rating">
+                                <option value="">Todas</option>
+                                <option value="5">★★★★★</option>
+                                <option value="4">★★★★☆</option>
+                                <option value="3">★★★☆☆</option>
+                                <option value="2">★★☆☆☆</option>
+                                <option value="1">★☆☆☆☆</option>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-decade">Década</label>
+                            <select id="filter-decade">
+                                <option value="">Todas</option>
+                                <% if (decades && decades.length > 0) { %>
+                                    <% decades.forEach(decade => { %>
+                                        <option value="<%= decade %>"><%= decade %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-genre">Gênero</label>
+                            <select id="filter-genre">
+                                <option value="">Todos</option>
+                                <% if (genres && genres.length > 0) { %>
+                                    <% genres.forEach(genre => { %>
+                                        <option value="<%= genre.id_genero %>"><%= genre.nome %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+
+                    <% if (userWatchedMovies && userWatchedMovies.length > 0) { %>
+                        <div class="movies-grid">
+                            <% userWatchedMovies.forEach(movie => { %>
+                                <div class="movie-card">
+                                    <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %>">
+                                    <p><%= movie.titulo %></p>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <div class="no-movies-message">
+                            <p>Não possui filmes</p>
+                        </div>
+                    <% } %>
+                </div>
+            <% } else if (activeTab === 'diario') { %>
+                <div class="section-block diary-section">
+                    <div class="filter-bar">
+                        <div class="filter-dropdown">
+                            <label for="filter-date">Data do Diário</label>
+                            <select id="filter-date">
+                                <option value="">Todas</option>
+                                </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-diary-rating">Avaliação</label>
+                            <select id="filter-diary-rating">
+                                <option value="">Todas</option>
+                                <option value="5">★★★★★</option>
+                                <option value="4">★★★★☆</option>
+                                <option value="3">★★★☆☆</option>
+                                <option value="2">★★☆☆☆</option>
+                                <option value="1">★☆☆☆☆</option>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-diary-decade">Década</label>
+                            <select id="filter-diary-decade">
+                                <option value="">Todas</option>
+                                <% if (decades && decades.length > 0) { %>
+                                    <% decades.forEach(decade => { %>
+                                        <option value="<%= decade %>"><%= decade %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-diary-genre">Gênero</label>
+                            <select id="filter-diary-genre">
+                                <option value="">Todos</option>
+                                <% if (genres && genres.length > 0) { %>
+                                    <% genres.forEach(genre => { %>
+                                        <option value="<%= genre.id_genero %>"><%= genre.nome %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <button class="add-movie-button">Adicionar Filme +</button>
+                    </div>
+
+                    <% if (diaryEntries && diaryEntries.length > 0) { %>
+                        <div class="diary-entries-grid">
+                            <% diaryEntries.forEach(entry => { %>
+                                <div class="diary-entry-card">
+                                    <a href="/filme/<%= entry.movieId %>" class="movie-link">
+                                        <img src="/img/posters/<%= entry.movieId %>.jpg" alt="<%= entry.movieTitle %>" class="diary-movie-poster">
+                                    </a>
+                                    <div class="diary-entry-info">
+                                        <p class="diary-entry-date"><%= entry.date %></p>
+                                        <p class="diary-entry-title"><a href="/filme/<%= entry.movieId %>"><%= entry.movieTitle %></a></p>
+                                        <% if (entry.rating) { %>
+                                            <p class="diary-entry-rating">Avaliação: <%= '★'.repeat(entry.rating) + '☆'.repeat(5 - entry.rating) %></p>
+                                        <% } %>
+                                        <% if (entry.notes) { %>
+                                            <p class="diary-entry-notes"><%= entry.notes %></p>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <div class="no-diary-entries-message">
+                            <p>Nenhum registro no diário. Clique em "Adicionar Filme +" para começar!</p>
+                        </div>
+                    <% } %>
+                </div>
+            <% } %>
+        </section>
+    </main>
+
+    <%- include('footer') %>
+
+    <div id="addDiaryEntryModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Adicionar Registro ao Diário</h2>
+            <form id="addDiaryEntryForm">
+                <div class="form-group">
+                    <label for="movieSearch">Pesquisar Filme:</label>
+                    <input type="text" id="movieSearch" placeholder="Nome do filme">
+                    <input type="hidden" id="selectedMovieId">
+                    <ul id="movieSearchResults" class="search-results-list"></ul>
+                </div>
+                <div class="form-group">
+                    <label for="diaryDate">Data Assistido:</label>
+                    <input type="date" id="diaryDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="diaryRating">Sua Avaliação:</label>
+                    <select id="diaryRating">
+                        <option value="">Sem avaliação</option>
+                        <option value="1">★☆☆☆☆</option>
+                        <option value="2">★★☆☆☆</option>
+                        <option value="3">★★★☆☆</option>
+                        <option value="4">★★★★☆</option>
+                        <option value="5">★★★★★</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="diaryNotes">Suas Notas (Opcional):</label>
+                    <textarea id="diaryNotes" rows="4" placeholder="Alguma nota sobre o filme?"></textarea>
+                </div>
+                <button type="submit" class="submit-button">Salvar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/diary.js"></script>
 </body>
 
 </html>

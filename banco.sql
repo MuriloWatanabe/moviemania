@@ -80,5 +80,16 @@ CREATE TABLE listas_usuario (
   FOREIGN KEY (id_filme) REFERENCES filmes(id_filme)
 );
 
+CREATE TABLE diario (
+    id_registro INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_filme INT NOT NULL,
+    data_assistido DATE NOT NULL,
+    avaliacao INT,
+    notas TEXT,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_filme) REFERENCES filmes(id_filme) ON DELETE CASCADE
+);
+
 -- Garantir que as Chaves Estrangeiras estão Ativas
 SET FOREIGN_KEY_CHECKS = 1;

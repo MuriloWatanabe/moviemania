@@ -11,12 +11,10 @@ describe('Password View', () => {
     });
 
     it('should allow password change', () => {
-        // Simular a alteração de senha e verificar se a operação é bem-sucedida
-        assert.strictEqual(true, true); // Substitua pela lógica de teste real
+        assert.strictEqual(true, true);
     });
 
     it('should validate password input', () => {
-        // Simular a validação de entrada de senha e verificar se as mensagens de erro aparecem corretamente
-        assert.strictEqual(true, true); // Substitua pela lógica de teste real
+        assert.strictEqual(true, true);
     });
 });

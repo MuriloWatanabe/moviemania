@@ -135,8 +135,6 @@ const authController = {
     try {
       connection = await db.getConnection();
 
-      // Inicializa todas as variáveis que serão passadas para a view
-      // Isso garante que elas existam, mesmo que vazias, independentemente da aba ativa.
       let favoriteMovies = [];
       let recentActivities = [];
       let userWatchedMovies = [];

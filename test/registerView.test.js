@@ -12,10 +12,20 @@ describe('Register View', () => {
     it('deve rejeitar cadastro com campos vazios', async () => {
         const res = await request(app)
             .post('/register')
+            .type('form')
             .send({ nome: '', email: '', senha: '' });
-        // Espera redirecionamento ou mensagem de erro
-        if (res.status !== 302 && !res.text.includes('Por favor, preencha todos os campos obrigatórios.')) {
+        if (!res.headers.location.includes('/register')) {
             throw new Error('Cadastro inválido não foi rejeitado');
+        }
+    });
+
+    it('deve rejeitar cadastro duplicado', async () => {
+        const res = await request(app)
+            .post('/register')
+            .type('form')
+            .send({ nome: 'Teste', email: 'teste@teste.com', senha: '123', maior_16_anos: 'on', aceitou_politica_privacidade: 'on' });
+        if (!res.headers.location.includes('/register')) {
+            throw new Error('Cadastro duplicado não foi rejeitado');
         }
     });
 });

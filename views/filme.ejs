@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= movie.titulo %> (<%= movie.ano_lancamento %>) - MovieMania</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/filme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <%- include("header") %>
+    </header>
+
+    <main class="movie-detail-page">
+        <section class="movie-header-section">
+            <div class="movie-backdrop" style="background-image: url('<%= movie.backdrop_url %>');">
+                <div class="overlay"></div>
+            </div>
+            <div class="movie-info-card">
+                <div class="poster-container">
+                    <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %> Poster" class="movie-poster">
+                </div>
+                <div class="details-container">
+                    <h1 class="movie-title"><%= movie.titulo %> <span class="movie-year"><%= movie.ano_lancamento %></span></h1>
+                    <p class="movie-original-title"><%= movie.titulo_original || movie.titulo %></p>
+                    <div class="rating-box">
+                        <span class="rating-score"><%= movie.averageRating ? movie.averageRating.toFixed(1) : 'N/A' %></span>
+                        <span class="rating-max">/ 5.0</span>
+                        <p class="total-ratings">Avaliações: <%= movie.totalRatings %></p>
+                    </div>
+                    <p class="movie-tagline"><%= movie.sinopse %></p>
+                    <div class="trailer-button">
+                        <button><i class="fas fa-play-circle"></i> TRAILER</button>
+                    </div>
+                    <div class="movie-actions">
+                        <button class="action-btn"><i class="fas fa-eye"></i> Assistido</button>
+                        <button class="action-btn"><i class="fas fa-bookmark"></i> Watchlist</button>
+                        <button class="action-btn"><i class="fas fa-heart"></i> Favorito</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="movie-details-section">
+            <nav class="movie-nav">
+                <ul>
+                    <li><a href="#elenco" class="active">Elenco</a></li>
+                    <li><a href="#detalhes">Detalhes</a></li>
+                    <li><a href="#genero">Gênero</a></li>
+                    <li><a href="#lancamento">Lançamento</a></li>
+                </ul>
+            </nav>
+
+            <div class="movie-section-content">
+                <div id="elenco" class="section-block">
+                    <h3>Elenco</h3>
+                    <div class="cast-grid">
+                        <% if (movie.cast && movie.cast.length > 0) { %>
+                            <% movie.cast.forEach(actor => { %>
+                                <span class="cast-item"><%= actor %></span>
+                            <% }); %>
+                        <% } else { %>
+                            <p>Informações de elenco não disponíveis.</p>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div id="detalhes" class="section-block">
+                    <h3>Detalhes</h3>
+                    <p><strong>Direção:</strong> <%= movie.direcao || 'Não informado' %></p>
+                    <p><strong>Produtores:</strong> <%= movie.produtores || 'Não informado' %></p>
+                    <p><strong>Roteiro:</strong> <%= movie.roteiro || 'Não informado' %></p>
+                    <p><strong>Música:</strong> <%= movie.musica || 'Não informado' %></p>
+                    <p><strong>Duração:</strong> <%= movie.duracao ? movie.duracao + ' minutos' : 'Não informado' %></p>
+                </div>
+
+                <div id="genero" class="section-block">
+                    <h3>Gênero</h3>
+                    <p><%= movie.genero_nome || 'Não informado' %></p>
+                </div>
+
+                <div id="lancamento" class="section-block">
+                    <h3>Lançamento</h3>
+                    <p><%= movie.data_lancamento ? new Date(movie.data_lancamento).toLocaleDateString('pt-BR') : 'Não informado' %></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="popular-reviews-section">
+            <h2>Avaliações Populares</h2>
+            <% if (popularReviews && popularReviews.length > 0) { %>
+                <div class="review-grid">
+                    <% popularReviews.forEach(review => { %>
+                        <div class="review-card">
+                            <div class="review-header">
+                                <img src="/img/default-avatar.png" alt="User Avatar" class="user-avatar-review">
+                                <span class="username-review">User<%= review.userId %></span>
+                            </div>
+                            <div class="review-details">
+                                <span class="review-rating"><%= '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating) %></span>
+                                <span class="review-date"><%= review.date %></span>
+                            </div>
+                            <p class="review-text-content"><%= review.text %></p>
+                            <div class="review-footer">
+                                <i class="fas fa-heart heart-icon"></i> Curte o Comentário <span><%= review.likes %> Curtidas</span>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="no-reviews-message">
+                    <p>Ainda não há avaliações para este filme.</p>
+                </div>
+            <% } %>
+        </section>
+
+        <section class="related-movies-section">
+            <h2>Filmes Relacionados</h2>
+            <% if (relatedMovies && relatedMovies.length > 0) { %>
+                <div class="movie-grid-related">
+                    <% relatedMovies.forEach(relatedMovie => { %>
+                        <a href="/filme/<%= relatedMovie.id_filme %>" class="movie-card-related">
+                            <img src="/img/posters/<%= relatedMovie.id_filme %>.jpg" alt="<%= relatedMovie.titulo %> Poster">
+                            <h3><%= relatedMovie.titulo %></h3>
+                        </a>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <p class="no-content-message">Nenhum filme relacionado encontrado.</p>
+            <% } %>
+        </section>
+
+    </main>
+
+    <%- include("footer") %>
+</body>
+
+</html>

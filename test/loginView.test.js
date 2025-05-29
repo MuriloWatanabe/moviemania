@@ -1,4 +1,3 @@
-const assert = require('assert');
 const request = require('supertest');
 const app = require('../app');
 
@@ -10,11 +9,23 @@ describe('Login View', () => {
         }
     });
 
-    it('deve aceitar entradas válidas', () => {
-        assert.ok(true);
+    it('deve rejeitar login com campos vazios', async () => {
+        const res = await request(app)
+            .post('/login')
+            .type('form')
+            .send({ email: '', senha: '' });
+        if (!res.headers.location.includes('/login')) {
+            throw new Error('Deveria redirecionar para login');
+        }
     });
 
-    it('deve rejeitar entradas inválidas', () => {
-        assert.ok(true);
+    it('deve rejeitar login com usuário inexistente', async () => {
+        const res = await request(app)
+            .post('/login')
+            .type('form')
+            .send({ email: 'naoexiste@teste.com', senha: 'senhaerrada' });
+        if (!res.headers.location.includes('/login')) {
+            throw new Error('Deveria redirecionar para login');
+        }
     });
 });

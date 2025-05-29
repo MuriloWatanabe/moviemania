@@ -5,7 +5,7 @@ const flash = require('connect-flash');
 const app = express();
 
 const authRoutes = require('./routes/auth');
-const authController = require('./controllers/authController');
+const authController = require('./controllers/authController'); // Importa o authController
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -31,19 +31,20 @@ app.use((req, res, next) => {
 });
 
 app.use('/', authRoutes);
-
 app.get('/', authController.isAuthenticated, authController.viewHome);
 
-// ROTAS DE API DEVEM VIR ANTES DO 404!
 app.get('/api/search-movies', authController.isAuthenticated, authController.searchMovies);
 app.post('/user/add-diary-entry', authController.isAuthenticated, authController.addDiaryEntry);
 app.get('/user/:tab?', authController.isAuthenticated, authController.user);
 
-// MIDDLEWARE 404 DEVE VIR DEPOIS DE TODAS AS ROTAS
+app.get('/filme/:id', authController.isAuthenticated, authController.viewMovieDetail);
+
+
 app.use((req, res, next) => {
     res.status(404).send("Desculpe, a página não foi encontrada.");
 });
 
+// MIDDLEWARE DE ERRO
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Algo deu errado no servidor!');

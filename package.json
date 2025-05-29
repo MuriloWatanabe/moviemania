@@ -4,7 +4,9 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha test/**/*.test.js --exit",
+    "coverage": "nyc --reporter=html --reporter=text mocha test/**/*.test.js --exit"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,7 @@
   "devDependencies": {
     "chai": "^5.2.0",
     "mocha": "^11.5.0",
+    "nyc": "^17.1.0",
     "supertest": "^7.1.1"
   }
 }

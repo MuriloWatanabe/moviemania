@@ -211,6 +211,72 @@
                         </div>
                     <% } %>
                 </div>
+            <% } else if (activeTab === 'reviews') { %>
+                <div class="section-block reviews-section">
+                    <div class="filter-bar">
+                        <div class="filter-title">Reviews</div>
+                        <div class="filter-dropdown">
+                            <label for="filter-review-date">Data do Diário</label>
+                            <select id="filter-review-date">
+                                <option value="">Todas</option>
+                                <% if (reviewDates && reviewDates.length > 0) { %>
+                                    <% reviewDates.forEach(date => { %>
+                                        <option value="<%= date %>"><%= date %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-review-rating">Avaliação</label>
+                            <select id="filter-review-rating">
+                                <option value="">Todas</option>
+                                <option value="5">★★★★★</option>
+                                <option value="4">★★★★☆</option>
+                                <option value="3">★★★☆☆</option>
+                                <option value="2">★★☆☆☆</option>
+                                <option value="1">★☆☆☆☆</option>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-review-decade">Década</label>
+                            <select id="filter-review-decade">
+                                <option value="">Todas</option>
+                                <% if (decades && decades.length > 0) { %>
+                                    <% decades.forEach(decade => { %>
+                                        <option value="<%= decade %>"><%= decade %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <button class="add-review-button">Adicionar avaliação +</button>
+                    </div>
+
+                    <% if (reviews && reviews.length > 0) { %>
+                        <div class="reviews-grid">
+                            <% reviews.forEach(review => { %>
+                                <div class="review-card">
+                                    <a href="/filme/<%= review.movieId %>" class="movie-link">
+                                        <img src="/img/posters/<%= review.movieId %>.jpg" alt="<%= review.movieTitle %>" class="review-movie-poster">
+                                    </a>
+                                    <div class="review-info">
+                                        <p class="review-date"><%= review.date %></p>
+                                        <p class="review-title"><a href="/filme/<%= review.movieId %>"><%= review.movieTitle %></a></p>
+                                        <% if (review.rating) { %>
+                                            <p class="review-rating">Avaliação: <%= '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating) %></p>
+                                        <% } %>
+                                        <% if (review.text) { %>
+                                            <p class="review-text"><%= review.text %></p>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <div class="no-reviews-message">
+                            <p>Nenhuma Avaliação Cadastrada</p>
+                        </div>
+                    <% } %>
+                </div>
             <% } %>
         </section>
     </main>
@@ -253,6 +319,7 @@
     </div>
 
     <script src="/js/diary.js"></script>
+    <script src="/js/reviews.js"></script>
 </body>
 
 </html>

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/css/footer.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/header.css">
-  <link rel="stylesheet" href="/css/reviews.css"> 
+  <link rel="stylesheet" href="/css/reviews.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
@@ -19,103 +19,68 @@
   </header>
   <div class="content">
     <h1>Bem vindo ao Moviemania!</h1>
+
     <h2 id="subh2">Novidades no MovieMania</h2>
     <div class="movie-grid" id="novidades">
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Vingadores Ultimato</h3>
-      </div>
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Vingadores Ultimato</h3>
-      </div>
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Vingadores Ultimato</h3>
-      </div>
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Vingadores Ultimato</h3>
-      </div>
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Vingadores Ultimato</h3>
-      </div>
+      <% if (newMovies && newMovies.length > 0) { %>
+        <% newMovies.forEach(movie => { %>
+          <a href="/filme/<%= movie.id_filme %>" class="movie-card">
+            <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %>">
+            <h3><%= movie.titulo %></h3>
+          </a>
+        <% }); %>
+      <% } else { %>
+        <p class="no-content-message">Nenhum filme novo disponível no momento.</p>
+      <% } %>
     </div>
 
     <h2 id="subh2">Populares no MovieMania</h2>
     <div class="movie-grid" id="populares">
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Título do Filme</h3>
-      </div>
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Título do Filme</h3>
-      </div>
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Título do Filme</h3>
-      </div>
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Título do Filme</h3>
-      </div>
-      <div class="movie-card">
-        <img src="https://br.web.img3.acsta.net/pictures/19/04/26/17/30/2428965.jpg" alt="Filme 1">
-        <h3>Título do Filme</h3>
-      </div>
+      <% if (popularMovies && popularMovies.length > 0) { %>
+        <% popularMovies.forEach(movie => { %>
+          <a href="/filme/<%= movie.id_filme %>" class="movie-card">
+            <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %>">
+            <h3><%= movie.titulo %></h3>
+          </a>
+        <% }); %>
+      <% } else { %>
+        <p class="no-content-message">Nenhum filme popular disponível no momento.</p>
+      <% } %>
     </div>
 
     <section class="reviews-section">
       <h2>Reviews Populares da Semana</h2>
       <div class="review-grid">
-        <div class="review-card">
-          <img src="https://image.tmdb.org/t/p/w500/z0g2YJ4K7K89jL3mJ0t3Q5d6U.jpg" alt="O Mestre Invencível">
-          <div class="review-content">
-            <div class="review-header">
-              <img src="https://via.placeholder.com/30/d089f2/ffffff?text=U" alt="User Avatar" class="user-avatar">
-              <span class="username">User106</span>
-            </div>
-            <div class="review-details">
-              <h3>O Mestre Invencível <span class="movie-year">1978</span></h3>
-              <div class="review-stats">
-                <span><i class="fas fa-star icon"></i> 56</span>
-                <span><i class="fas fa-comment-alt icon"></i></span>
+        <% if (homeReviews && homeReviews.length > 0) { %>
+          <% homeReviews.forEach(review => { %>
+            <div class="review-card">
+              <a href="/filme/<%= review.movieId %>">
+                <img src="/img/posters/<%= review.movieId %>.jpg" alt="<%= review.movieTitle %>">
+              </a>
+              <div class="review-content">
+                <div class="review-header">
+                  <img src="/img/default-avatar.png" alt="User Avatar" class="user-avatar">
+                  <span class="username">User<%= review.userId %></span>
+                </div>
+                <div class="review-details">
+                  <h3><a href="/filme/<%= review.movieId %>"><%= review.movieTitle %></a> <span class="movie-year"><%= review.movieYear %></span></h3>
+                  <div class="review-stats">
+                    <span><i class="fas fa-star icon"></i> <%= review.rating %></span>
+                    <span><i class="fas fa-comment-alt icon"></i></span>
+                  </div>
+                </div>
+                <p class="review-text">
+                  <%= review.text %>
+                </p>
+                <div class="review-footer">
+                  <i class="fas fa-heart heart-icon"></i> Curte o Comentário <span><%= review.likes %> Curtidas</span>
+                </div>
               </div>
             </div>
-            <p class="review-text">
-              Filme clássico do Jackie Chan, demonstrando o que será o estilo dessa
-              lenda!
-            </p>
-            <div class="review-footer">
-              <i class="fas fa-heart heart-icon"></i> Curte o Comentário <span>1.342 Curtidas</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="review-card">
-          <img src="https://image.tmdb.org/t/p/w500/y6wL2i73SjqfT4hC0wD2j5qB2R.jpg" alt="Bater ou Correr em Londres">
-          <div class="review-content">
-            <div class="review-header">
-              <img src="https://via.placeholder.com/30/d089f2/ffffff?text=U" alt="User Avatar" class="user-avatar">
-              <span class="username">User106</span>
-            </div>
-            <div class="review-details">
-              <h3>Bater ou Correr em Londres <span class="movie-year">2003</span></h3>
-              <div class="review-stats">
-                <span><i class="fas fa-star icon"></i> 42</span>
-                <span><i class="fas fa-comment-alt icon"></i></span>
-              </div>
-            </div>
-            <p class="review-text">
-              Um clássico filme do Jackie Chan, mais reprisado na sessão da tarde que uma noite no museu kkkk
-            </p>
-            <div class="review-footer">
-              <i class="fas fa-heart heart-icon"></i> Curte o Comentário <span>2.561 Curtidas</span>
-            </div>
-          </div>
-        </div>
+          <% }); %>
+        <% } else { %>
+          <p class="no-content-message">Nenhuma review popular para exibir no momento.</p>
+        <% } %>
       </div>
     </section>
 

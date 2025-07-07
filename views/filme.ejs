@@ -24,7 +24,7 @@
             </div>
             <div class="movie-info-card">
                 <div class="poster-container">
-                    <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %> Poster" class="movie-poster">
+                    <img src="<%= movie.backdrop_url %>" alt="<%= movie.titulo %> Poster" class="movie-poster">
                 </div>
                 <div class="details-container">
                     <h1 class="movie-title"><%= movie.titulo %> <span class="movie-year"><%= movie.ano_lancamento %></span></h1>
@@ -51,6 +51,7 @@
             <nav class="movie-nav">
                 <ul>
                     <li><a href="#elenco" class="active">Elenco</a></li>
+                    <li><a href="#direcao">Direção</a></li>
                     <li><a href="#detalhes">Detalhes</a></li>
                     <li><a href="#genero">Gênero</a></li>
                     <li><a href="#lancamento">Lançamento</a></li>
@@ -61,9 +62,14 @@
                 <div id="elenco" class="section-block">
                     <h3>Elenco</h3>
                     <div class="cast-grid">
-                        <% if (movie.cast && movie.cast.length > 0) { %>
-                            <% movie.cast.forEach(actor => { %>
-                                <span class="cast-item"><%= actor %></span>
+                        <% if (cast && cast.length > 0) { %>
+                            <% cast.forEach(ator => { %>
+                                <span class="cast-item">
+                                    <%= ator.nome %>
+                                    <% if (ator.papel) { %>
+                                        <span class="cast-role">(<%= ator.papel %>)</span>
+                                    <% } %>
+                                </span>
                             <% }); %>
                         <% } else { %>
                             <p>Informações de elenco não disponíveis.</p>
@@ -71,13 +77,18 @@
                     </div>
                 </div>
 
+                <div id="direcao" class="section-block">
+                    <h3>Direção</h3>
+                    <p><strong>Diretores:</strong> <%= movie.directors && movie.directors.length > 0 ? movie.directors.join(', ') : 'Não informado' %></p>
+                    <p><strong>Produtores:</strong> <%= movie.producers && movie.producers.length > 0 ? movie.producers.join(', ') : 'Não informado' %></p>
+                    <p><strong>Roteiristas:</strong> <%= movie.writers && movie.writers.length > 0 ? movie.writers.join(', ') : 'Não informado' %></p>
+                    <p><strong>Música:</strong> <%= movie.musicBy && movie.musicBy.length > 0 ? movie.musicBy.join(', ') : 'Não informado' %></p>
+                </div>
+
                 <div id="detalhes" class="section-block">
                     <h3>Detalhes</h3>
-                    <p><strong>Direção:</strong> <%= movie.direcao || 'Não informado' %></p>
-                    <p><strong>Produtores:</strong> <%= movie.produtores || 'Não informado' %></p>
-                    <p><strong>Roteiro:</strong> <%= movie.roteiro || 'Não informado' %></p>
-                    <p><strong>Música:</strong> <%= movie.musica || 'Não informado' %></p>
                     <p><strong>Duração:</strong> <%= movie.duracao ? movie.duracao + ' minutos' : 'Não informado' %></p>
+                    <p><strong>Data de Cadastro:</strong> <%= movie.data_cadastro ? new Date(movie.data_cadastro).toLocaleDateString('pt-BR') : 'Não informado' %></p>
                 </div>
 
                 <div id="genero" class="section-block">
@@ -100,7 +111,7 @@
                         <div class="review-card">
                             <div class="review-header">
                                 <img src="/img/default-avatar.png" alt="User Avatar" class="user-avatar-review">
-                                <span class="username-review">User<%= review.userId %></span>
+                                <span class="username-review"><%= review.userName %></span>
                             </div>
                             <div class="review-details">
                                 <span class="review-rating"><%= '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating) %></span>
@@ -135,10 +146,18 @@
                 <p class="no-content-message">Nenhum filme relacionado encontrado.</p>
             <% } %>
         </section>
-
     </main>
 
     <%- include("footer") %>
+
+    <script>
+        document.querySelectorAll('.movie-nav a').forEach(link => {
+            link.addEventListener('click', function () {
+                document.querySelectorAll('.movie-nav a').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
 </body>
 
 </html>

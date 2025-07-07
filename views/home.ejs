@@ -25,7 +25,7 @@
       <% if (newMovies && newMovies.length > 0) { %>
         <% newMovies.forEach(movie => { %>
           <a href="/filme/<%= movie.id_filme %>" class="movie-card">
-            <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %>">
+            <img src="<%= movie.backdrop_url %>" alt="<%= movie.titulo %>">
             <h3><%= movie.titulo %></h3>
           </a>
         <% }); %>
@@ -39,7 +39,7 @@
       <% if (popularMovies && popularMovies.length > 0) { %>
         <% popularMovies.forEach(movie => { %>
           <a href="/filme/<%= movie.id_filme %>" class="movie-card">
-            <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %>">
+            <img src="<%= movie.backdrop_url %>" alt="<%= movie.titulo %>">
             <h3><%= movie.titulo %></h3>
           </a>
         <% }); %>
@@ -55,7 +55,7 @@
           <% homeReviews.forEach(review => { %>
             <div class="review-card">
               <a href="/filme/<%= review.movieId %>">
-                <img src="/img/posters/<%= review.movieId %>.jpg" alt="<%= review.movieTitle %>">
+                <img src="<%= review.movieBackdropUrl %>" alt="<%= review.movieTitle %>">
               </a>
               <div class="review-content">
                 <div class="review-header">

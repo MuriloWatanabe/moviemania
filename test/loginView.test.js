@@ -29,3 +29,26 @@ describe('Login View', () => {
         }
     });
 });
+
+describe('User Profile', function () {
+    let agent;
+    beforeEach(() => {
+        agent = request.agent(app);
+    });
+
+    it('deve acessar a página de perfil autenticado', async function () {
+        await agent
+            .post('/login')
+            .type('form')
+            .send({ email: 'teste@email.com', senha: '12345' })
+            .expect(302);
+
+        const res = await agent
+            .get('/user')
+            .expect(200);
+
+        if (!res.text.includes('Perfil')) {
+            throw new Error('Não carregou a página de perfil');
+        }
+    });
+});

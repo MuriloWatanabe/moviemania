@@ -277,7 +277,97 @@
                         </div>
                     <% } %>
                 </div>
-            <% } %>
+            <% } else if (activeTab === 'watchlist') { %>
+                <!-- Watchlist -->
+                <div class="section-block watchlist-section">
+                    <div class="filter-bar">
+                        <div class="filter-title">Filmes que deseja assistir</div>
+                        <div class="filter-dropdown">
+                            <label for="filter-watchlist-date">Data do Diário</label>
+                            <select id="filter-watchlist-date">
+                                <option value="">Todas</option>
+                                <% if (decades && decades.length > 0) { %>
+                                    <% decades.forEach(decade => { %>
+                                        <option value="<%= decade %>"><%= decade %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-watchlist-rating">Avaliação</label>
+                            <select id="filter-watchlist-rating">
+                                <option value="">Todas</option>
+                                <option value="5">★★★★★</option>
+                                <option value="4">★★★★☆</option>
+                                <option value="3">★★★☆☆</option>
+                                <option value="2">★★☆☆☆</option>
+                                <option value="1">★☆☆☆☆</option>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-watchlist-decade">Década</label>
+                            <select id="filter-watchlist-decade">
+                                <option value="">Todas</option>
+                                <% if (decades && decades.length > 0) { %>
+                                    <% decades.forEach(decade => { %>
+                                        <option value="<%= decade %>"><%= decade %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <label for="filter-watchlist-genre">Gênero</label>
+                            <select id="filter-watchlist-genre">
+                                <option value="">Todos</option>
+                                <% if (genres && genres.length > 0) { %>
+                                    <% genres.forEach(genre => { %>
+                                        <option value="<%= genre.id_genero %>"><%= genre.nome %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <button class="add-movie-button">Adicionar Filme +</button>
+                        <button class="private-list-button">Privar Lista</button>
+                    </div>
+
+                    <% if (userWatchlist && userWatchlist.length > 0) { %>
+                        <div class="movies-grid">
+                            <% userWatchlist.forEach(movie => { %>
+                                <div class="movie-card">
+                                    <img src="/img/posters/<%= movie.id_filme %>.jpg" alt="<%= movie.titulo %>">
+                                    <p><%= movie.titulo %></p>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <div class="no-movies-message">
+                            <p>Nenhum registro</p>
+                        </div>
+                    <% } %>
+                </div>
+            <% } else if (activeTab === 'listas') { %>
+    <div class="section-block listas-section">
+        <div class="listas-header">
+            <span class="listas-title">Suas Listas</span>
+            <div class="listas-filtros">
+                <span>Mostrar 
+                    <select class="listas-select">
+                        <option value="todas">TODAS</option>
+                    </select>
+                </span>
+                <span>Ordenar por 
+                    <select class="listas-select">
+                        <option value="atualizado">ÚLTIMO ATUALIZADO</option>
+                    </select>
+                </span>
+                <a href="#" class="cadastrar-lista-link" id="openAddListModal">Cadastrar Lista +</a>
+            </div>
+        </div>
+        <div class="listas-box">
+            <p class="no-list-message">Nenhuma Lista<br>Cadastrada</p>
+        </div>
+    </div>
+<% } %>
         </section>
     </main>
 
@@ -318,8 +408,23 @@
         </div>
     </div>
 
+    <div id="addListModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" id="closeAddListModal">&times;</span>
+    <h2>Cadastrar Nova Lista</h2>
+    <form id="addListForm">
+      <div class="form-group">
+        <label for="nomeLista">Nome da Lista:</label>
+        <input type="text" id="nomeLista" name="nomeLista" required>
+      </div>
+      <button type="submit" class="submit-button">Salvar Lista</button>
+    </form>
+  </div>
+</div>
+
     <script src="/js/diary.js"></script>
     <script src="/js/reviews.js"></script>
+    <script src="/js/user.js"></script>
 </body>
 
 </html>

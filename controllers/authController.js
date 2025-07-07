@@ -9,7 +9,7 @@ const authController = {
     const { email, senha } = req.body;
 
     if (!email || !senha) {
-      req.flash('error', 'Por favor, preença todos os campos.');
+      req.flash('error', 'Por favor, preencha todos os campos.');
       return res.redirect('/login');
     }
 
@@ -124,11 +124,11 @@ const authController = {
         connection = await db.getConnection();
 
         const [newMovies] = await connection.execute(
-            `SELECT id_filme, titulo, ano_lancamento FROM filmes ORDER BY data_lancamento DESC LIMIT 5`
+            `SELECT id_filme, titulo, ano_lancamento, backdrop_url FROM filmes ORDER BY data_lancamento DESC LIMIT 5`
         );
 
         const [popularMovies] = await connection.execute(
-            `SELECT f.id_filme, f.titulo, f.ano_lancamento, AVG(d.avaliacao) as avg_rating
+            `SELECT f.id_filme, f.titulo, f.ano_lancamento, f.backdrop_url, AVG(d.avaliacao) as avg_rating
              FROM filmes f
              JOIN diario d ON f.id_filme = d.id_filme
              WHERE d.avaliacao IS NOT NULL
@@ -147,6 +147,7 @@ const authController = {
               f.id_filme AS movieId,
               f.titulo AS movieTitle,
               f.ano_lancamento AS movieYear,
+              f.backdrop_url AS movieBackdropUrl,
               (SELECT COUNT(c.id_curtida) FROM curtidas c WHERE c.id_registro = d.id_registro) AS likes
            FROM diario d
            JOIN usuarios u ON d.id_usuario = u.id_usuario
@@ -199,6 +200,7 @@ const authController = {
       let favoriteMovies = [];
       let recentActivities = [];
       let userWatchedMovies = [];
+      let userWatchlist = [];
       let genres = [];
       let decades = [];
       let diaryEntries = [];
@@ -276,6 +278,19 @@ const authController = {
 
         const [allGenres] = await connection.execute('SELECT id_genero, nome FROM generos ORDER BY nome');
         genres = allGenres;
+      } else if (activeTab === 'watchlist') {
+        // Carregar filmes da watchlist do usuário
+        const [watchlistMovies] = await connection.execute(
+          `SELECT f.id_filme, f.titulo, f.sinopse, f.ano_lancamento
+             FROM listas_usuario lu
+             JOIN filmes f ON lu.id_filme = f.id_filme
+             WHERE lu.id_usuario = ? AND lu.tipo_lista = 'watchlist'`,
+          [userId]
+        );
+        userWatchlist = watchlistMovies;
+
+        const [allGenres] = await connection.execute('SELECT id_genero, nome FROM generos ORDER BY nome');
+        genres = allGenres;
       }
 
       res.render('user', {
@@ -288,7 +303,8 @@ const authController = {
         decades: decades,
         diaryEntries: diaryEntries,
         reviews: reviews,
-        reviewDates: reviewDates
+        reviewDates: reviewDates,
+        userWatchlist: userWatchlist
       });
 
     } catch (error) {
@@ -301,29 +317,29 @@ const authController = {
   },
 
   searchMovies: async (req, res) => {
-        const query = req.query.q;
+    const query = req.query.q;
 
-        if (!query || query.length < 3) {
-            return res.json([]);
-        }
+    if (!query || query.length < 3) {
+      return res.json([]);
+    }
 
-        let connection;
-        try {
-            connection = await db.getConnection();
-            const searchTerm = `%${query}%`;
-            const [movies] = await connection.execute(
-                `SELECT id_filme, titulo, ano_lancamento FROM filmes WHERE titulo LIKE ? LIMIT 10`,
-                [searchTerm]
-            );
+    let connection;
+    try {
+      connection = await db.getConnection();
+      const searchTerm = `%${query}%`;
+      const [movies] = await connection.execute(
+        `SELECT id_filme, titulo, ano_lancamento FROM filmes WHERE titulo LIKE ? LIMIT 10`,
+        [searchTerm]
+      );
 
-            res.json(movies);
-        } catch (error) {
-            console.error('Erro ao pesquisar filmes no banco de dados:', error);
-            res.status(500).json({ message: 'Erro interno do servidor ao pesquisar filmes.' });
-        } finally {
-            if (connection) connection.release();
-        }
-    },
+      res.json(movies);
+    } catch (error) {
+      console.error('Erro ao pesquisar filmes no banco de dados:', error);
+      res.status(500).json({ message: 'Erro interno do servidor ao pesquisar filmes.' });
+    } finally {
+      if (connection) connection.release();
+    }
+  },
 
   addDiaryEntry: async (req, res) => {
     const userId = req.session.user.id;
@@ -350,6 +366,30 @@ const authController = {
     }
   },
 
+  addUserList: async (req, res) => {
+    const userId = req.session.user.id;
+    const { nome_lista } = req.body;
+
+    if (!nome_lista) {
+      return res.status(400).json({ message: 'Nome da lista é obrigatório.' });
+    }
+
+    let connection;
+    try {
+      connection = await db.getConnection();
+      await connection.execute(
+        `INSERT INTO listas_usuario (id_usuario, nome_lista, data_criacao) VALUES (?, ?, NOW())`,
+        [userId, nome_lista]
+      );
+      res.status(201).json({ message: 'Lista criada com sucesso!' });
+    } catch (error) {
+      console.error('Erro ao criar lista:', error);
+      res.status(500).json({ message: 'Erro ao criar lista.' });
+    } finally {
+      if (connection) connection.release();
+    }
+  },
+
   viewMovieDetail: async (req, res) => {
     if (!req.session.user) {
       req.flash('error', 'Você precisa estar logado para ver os detalhes do filme.');
@@ -362,89 +402,86 @@ const authController = {
     try {
       connection = await db.getConnection();
 
-      const [movieRows] = await connection.execute(
-        `SELECT
-            f.id_filme,
-            f.titulo,
-            f.titulo_original,
-            f.sinopse,
-            f.ano_lancamento,
-            f.duracao,
-            f.data_lancamento,
-            f.direcao,
-            f.produtores,
-            f.roteiro,
-            f.musica,
-            g.nome AS genero_nome,
-            f.backdrop_url,
-            (SELECT AVG(avaliacao) FROM diario WHERE id_filme = f.id_filme AND avaliacao IS NOT NULL) AS averageRating,
-            (SELECT COUNT(avaliacao) FROM diario WHERE id_filme = f.id_filme AND avaliacao IS NOT NULL) AS totalRatings
-         FROM filmes f
-         LEFT JOIN generos g ON f.id_genero = g.id_genero
-         WHERE f.id_filme = ?`,
-        [movieId]
-      );
+      const [movieRows] = await connection.execute(`
+        SELECT
+          f.*,
+          g.nome AS genero_nome,
+          (SELECT AVG(avaliacao) FROM diario WHERE id_filme = f.id_filme AND avaliacao IS NOT NULL) AS averageRating,
+          (SELECT COUNT(avaliacao) FROM diario WHERE id_filme = f.id_filme AND avaliacao IS NOT NULL) AS totalRatings
+        FROM filmes f
+        LEFT JOIN generos g ON f.id_genero = g.id_genero
+        WHERE f.id_filme = ?
+      `, [movieId]);
 
       if (movieRows.length === 0) {
         req.flash('error', 'Filme não encontrado.');
         return res.redirect('/');
       }
+
       const movie = movieRows[0];
-
-      // Garante que averageRating e totalRatings são números, ou 0 se forem NULL
       movie.averageRating = movie.averageRating !== null ? parseFloat(movie.averageRating) : 0;
-      movie.totalRatings = movie.totalRatings !== null ? parseInt(movie.totalRatings, 10) : 0;
+      movie.totalRatings = movie.totalRatings !== null ? parseInt(movie.totalRatings) : 0;
+      movie.data_lancamento_formatada = new Date(movie.data_lancamento).toLocaleDateString('pt-BR');
 
+      movie.directors = movie.direcao ? movie.direcao.split(',').map(s => s.trim()) : [];
+      movie.writers = movie.roteiro ? movie.roteiro.split(',').map(s => s.trim()) : [];
+      movie.producers = movie.produtores ? movie.produtores.split(',').map(s => s.trim()) : [];
+      movie.musicBy = movie.musica ? movie.musica.split(',').map(s => s.trim()) : [];
 
-      movie.cast = ['Jackie Chan', 'Yuen Siu-tien', 'Hwang Jang-lee', 'Dean Shek', 'Lam Kau'];
+      const [castRows] = await connection.execute(`
+        SELECT a.nome, fa.papel
+        FROM filmes_atores fa
+        JOIN atores a ON fa.id_ator = a.id_ator
+        WHERE fa.id_filme = ?
+      `, [movieId]);
 
-      const [reviewRows] = await connection.execute(
-        `SELECT
-            d.avaliacao AS rating,
-            d.notas AS text,
-            d.data_assistido AS date,
-            u.id_usuario AS userId,
-            u.nome AS userName,
-            (SELECT COUNT(c.id_curtida) FROM curtidas c WHERE c.id_registro = d.id_registro) AS likes
-         FROM diario d
-         JOIN usuarios u ON d.id_usuario = u.id_usuario
-         WHERE d.id_filme = ? AND d.notas IS NOT NULL AND d.avaliacao IS NOT NULL
-         ORDER BY likes DESC, d.data_assistido DESC
-         LIMIT 3`,
-        [movieId]
-      );
+      const [reviewRows] = await connection.execute(`
+        SELECT
+          d.avaliacao AS rating,
+          d.notas AS text,
+          d.data_assistido AS date,
+          u.id_usuario AS userId,
+          u.nome AS userName,
+          (SELECT COUNT(c.id_curtida) FROM curtidas c WHERE c.id_registro = d.id_registro) AS likes
+        FROM diario d
+        JOIN usuarios u ON d.id_usuario = u.id_usuario
+        WHERE d.id_filme = ? AND d.notas IS NOT NULL AND d.avaliacao IS NOT NULL
+        ORDER BY likes DESC, d.data_assistido DESC
+        LIMIT 3
+      `, [movieId]);
 
-      const popularReviews = reviewRows.map(review => ({
-        ...review,
-        date: new Date(review.date).toLocaleDateString('pt-BR'),
+      const popularReviews = reviewRows.map(r => ({
+        ...r,
+        date: new Date(r.date).toLocaleDateString('pt-BR'),
       }));
 
       let relatedMovies = [];
       if (movie.id_genero !== null && movie.id_genero !== undefined) {
-          const [relatedMoviesRows] = await connection.execute(
-            `SELECT id_filme, titulo FROM filmes
-             WHERE id_genero = ? AND id_filme != ?
-             ORDER BY RAND() LIMIT 5`,
-            [movie.id_genero, movieId]
-          );
-          relatedMovies = relatedMoviesRows;
+        const [relatedRows] = await connection.execute(`
+          SELECT id_filme, titulo
+          FROM filmes
+          WHERE id_genero = ? AND id_filme != ?
+          ORDER BY RAND() LIMIT 5
+        `, [movie.id_genero, movieId]);
+        relatedMovies = relatedRows;
       }
 
       res.render('filme', {
         currentUser: req.session.user,
-        movie: movie,
-        popularReviews: popularReviews,
-        relatedMovies: relatedMovies
+        movie,
+        popularReviews,
+        cast: castRows,
+        relatedMovies
       });
 
     } catch (error) {
       console.error('Erro ao carregar detalhes do filme:', error);
-      req.flash('error', 'Ocorreu um erro ao carregar os detalhes do filme.');
+      req.flash('error', 'Erro ao carregar detalhes do filme.');
       res.redirect('/');
     } finally {
       if (connection) connection.release();
     }
-  },
+  }
 };
 
 module.exports = authController;

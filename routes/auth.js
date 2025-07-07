@@ -10,9 +10,10 @@ router.post('/register', authController.userRegister);
 
 router.get('/password', authController.viewPassword);
 
-router.get('/home', authController.viewHome);
+router.get('/home', authController.isAuthenticated, authController.viewHome);
 
 router.get('/user', authController.isAuthenticated, authController.user);
 router.get('/user/:tab', authController.isAuthenticated, authController.user);
+router.post('/user/listas', authController.isAuthenticated, authController.addUserList);
 
 module.exports = router;
